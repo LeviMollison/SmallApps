@@ -1,0 +1,55 @@
+<html>
+<head>
+    <script type="text/javascript" src="js/formService.js"></script>
+    <script type="text/javascript" src="js/simpleCalculator.js"></script>
+    <script type="text/javascript">
+        if(window.addEventListener){ // Mozilla, Netscape, Firefox
+            window.addEventListener('load', loadEvent, false);
+        }
+        else if (window.attachEvent){ // IE
+            window.attachEvent('onload', loadEvent);
+        }
+        
+        function loadEvent(e){
+            var info = parseForm(document.location.href);
+            if(info){
+                var inputDisplay = document.getElementById('inputDisplay');
+                inputDisplay.innerText = info['input1'] +  info['operation'] + info['input2'];
+                var result = calculator(info['input1'], info['input2'], info['operation']);
+                if(!isNaN(result)){
+                    inputDisplay.innerText+= '= ' + result;
+                } else {
+                    inputDisplay.innerText = 'Whoops, looks like something went wrong with your input. Try again!';
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <form id="calculator">
+        <fieldset>
+            <legend>Calculator</legend>
+            <label for="firstInput">First Input</label>
+            <input id="firstInput" name="input1" type="number">
+            <br>
+            
+            <label for="secondInput">Second Input</label>
+            <input id="secondInput" name="input2" type="number">
+            <br>
+            
+            <label for="operationInput">Operation</label>
+            <select id="operationInput" name="operation">
+                <option value=""></option>
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="div">/</option>
+            </select>
+            <br>
+            
+            <input type="submit">
+        </fieldset>
+    </form>
+    <p id="inputDisplay"></p>
+</body>
+</html>
