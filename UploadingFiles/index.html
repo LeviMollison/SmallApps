@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+ <script type="text/javascript"></script>
+</head>
+<body>
+  <input type="file" id="files" name="files[]" multiple />
+  <output id="list"></output>
+
+  <script type="text/javascript">
+    function fileSelectEvent(e){
+      var files = e.target.files;
+      var output = [];
+      for(var i = 0, f; f = files[i]; i++){
+        output.push(
+          '<li><strong>',
+          encodeURI(f.name),
+          '</strong> (',
+          f.type || 'n/a',
+          ') - ',
+          f.size,
+          'bytes, last modified: ',
+          f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+          '</li>'
+        );
+      }
+      document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>'
+    }
+
+    document.getElementById('files').addEventListener('change', fileSelectEvent, false);
+  </script>
+</body>
+</html>
