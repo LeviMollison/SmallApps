@@ -3,13 +3,14 @@
  <script type="text/javascript"></script>
 </head>
 <body>
-  <!-- Some browsers natively treat this tag as a dragover event -->
-  <input type="file" id="files" name="files[]" multiple />
+  <div id="drop_zone">Drop your files here!</div>
   <output id="list"></output>
 
   <script type="text/javascript">
     function fileSelectEvent(e){
-      var files = e.target.files;
+      e.stopPropagation();
+      e.preventDefault();
+      var files = e.dataTransfer.files;
       var output = [];
       for(var i = 0, f; f = files[i]; i++){
         output.push(
@@ -27,7 +28,15 @@
       document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>'
     }
 
-    document.getElementById('files').addEventListener('change', fileSelectEvent, false);
+    function handleDragOver(e){
+      e.stopPropagation();
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy' // shows this is a copy
+    }
+
+    var dropZone = document.getElementById('drop_zone');
+    dropZone.addEventListener('dragover', handleDragOver, false);
+    dropZone.addEventListener('drop', fileSelectEvent, false);
   </script>
 </body>
 </html>
