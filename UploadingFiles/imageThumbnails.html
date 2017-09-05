@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<head>
+    <style>
+        .thumb{
+            height: 75px;
+            border: 1px solid black;
+            margin: 10px 5px 0 0;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="files" name="files[]" multiple />
+    <output id="list"></output>
+    
+    <script>
+        function fileSelect(e){
+            var files = e.target.files; // files object
+            
+            for(var i = 0, f; f = files[i]; i++){
+                if(!f.type.match('image.*')){ // checks for image files only
+                    continue;
+                }
+                
+                var reader = new FileReader();
+                
+                reader.onload = (
+                    function(theFile){
+                        return function(e){
+                            // Renders thumbnail
+                            var span = document.createElement('span');
+                            span.innerHTML = [
+                                '<img class="thumb" src="', 
+                                e.target.result,
+                                '" title="',
+                                encodeURI(theFile.name),
+                                '"/>'
+                            ].join('');
+                            document.getElementById('list').insertBefore(span, null);
+                        };
+                    })(f);
+                    reader.readAsDataURL(f);
+            }
+        }
+        document.getElementById('files').addEventListener('change', fileSelect, false);
+    </script>
+</body>
+</html>

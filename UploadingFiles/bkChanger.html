@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+    <head>
+        <style>
+            .changingBkround{
+                /* View Size */
+                max-width:80vw;
+                max-height: 90vh;
+                min-height: 240px;
+                min-width:326px;
+                width:80%;
+                height:80%;
+                /* Display */
+                background-size: cover;
+                background-color:black;
+                margin: 0;
+                margin-left:10%;
+                margin-right:10%;
+                padding: 0; 
+                
+                /* Positoning */
+                position:relative;
+                top: 20%;  
+            }
+        </style>
+        <script type="text/javascript" src="js/fileReader.js"></script>
+        <script type="text/javascript">
+            if(window.addEventListener){ // Mozilla, Netscape, Firefox
+                window.addEventListener('load', loadEvent, false);
+            }
+            else if (window.attachEvent){ // IE
+                window.attachEvent('onload', loadEvent);
+            }
+            
+            function loadEvent(){
+                document.getElementById('imageFiles').addEventListener('change', selectImageFileEvent, false);
+            }
+        </script>
+    </head>
+    <body>
+        <label for="imageFiles">Upload a new background image</label>
+        <input type="file" id="imageFiles" name="files" />
+        
+        
+        <div id="bgArea" class="changingBkround"></div>
+    </body>
+</html>
