@@ -1,0 +1,21 @@
+.fancy-menu{
+    
+}
+
+.fancy-menu ul{
+    list-style-type:none;
+    -webkit-padding-start:0; /* Need to disable for other browsers */
+}
+
+.fancy-menu li{
+    display:inline-block;
+    vertical-align: top;
+}
+
+.fancy-menu a{
+    text-decoration: none;
+}
+
+.fancy-menu a:hover{
+    
+}
