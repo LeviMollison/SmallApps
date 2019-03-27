@@ -1,0 +1,55 @@
+@keyframes movable-menu {
+	0% {
+		/*transform: translate(0,0);*/
+		opacity: 0;
+	}
+
+	100% {
+		/*transform: translate(50px,0);*/
+		opacity: 1;
+		z-index:1;
+	}
+}
+
+.menu-cont {
+	position:relative;
+}
+
+.left-side-menu {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	width:200px;
+	background-color:#f1f1f1;
+	overflow:hidden;
+}
+
+.list-item {
+	display:block;
+	color:#000;
+	padding:8px 16px;
+	text-decoration: none;
+}
+
+.list-item:hover {
+	background-color: #555;
+	color:white;
+}
+
+.sub-menu-cont:hover .sub-menu{
+	animation-name:movable-menu;
+	animation-duration: 0.5s;
+	animation-fill-mode:forwards;
+}
+
+.sub-menu {
+	opacity:0;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	position:absolute;
+	left:200px;
+	top:0;
+	background-color:#f1f1f1;
+	z-index:-1;
+}
