@@ -34,6 +34,7 @@ class Form extends React.Component {
     event.preventDefault();
     console.log(
       //this.userNameInput.current.value
+      this.state.userName
     )
   };
   render(){
@@ -42,6 +43,9 @@ class Form extends React.Component {
         <input 
           type="text" 
           placeholder="Github username" 
+          value={this.state.userName}
+          // Below makes react aware of changes instead
+          onChange={event => this.setState({ userName: event.target.value})} 
           // ref={this.userNameInput} 
           required
         />
