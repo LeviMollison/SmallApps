@@ -9,7 +9,7 @@ const PlayNumber = props => (
   // Why does the onclick work? Javascript Closures
   <button 
     className="number" 
-    onClick={() => console.log('Num', props.number)}
+    onClick={() => props.onClick(props.number, props.status)}
     style={{backgroundColor: colors[props.status] }}
   >
       {props.number}
@@ -39,8 +39,35 @@ const StarMatch = () => {
     if (candidateNums.includes(number)) {
       return candidatesAreWrong ? 'wrong' : 'candidate';
     }
-    return 'available'
+    return 'available';
   }
+  
+  const onNumberClick = (number, currentStatus) => {
+    if (currentStatus == 'used'){
+      return;
+    } 
+    const newCandidateNums = 
+          currentStatus === 'available' ? 
+            // If it's part of the candidate numbers array, need to remove it
+            candidateNums.concat(number) : candidateNums.filter(cn => cn !== number)
+    
+          candidateNums.concat(number);
+    if (utils.sum(newCandidateNums) !== stars) {
+      setCandidateNums(newCandidateNums);
+    } else { 
+      /* Sum of candidates = number of stars; we have a correct pick
+         If the number is not included in the new candidate numbers, keep it in the available numbers. Otherwise
+         Remove it
+      */
+      const newAvailableNums = availableNums.filter(
+        n => !newCandidateNums.includes(n)
+      );
+      setStars(utils.randomSumIn(newAvailableNums, 9)); //Redraws number of stars that are playable
+      setAvailableNums(newAvailableNums);
+      setCandidateNums([]);
+    }
+  };
+  
   return (
     <div className="game">
       <div className="help">
@@ -56,6 +83,7 @@ const StarMatch = () => {
               key={number} 
               status={numberStatus(number)}
               number={number} 
+              onClick={onNumberClick}
             />
           )}
         </div>
