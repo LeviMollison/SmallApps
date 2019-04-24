@@ -11,3 +11,9 @@ function parseForm(url){
         return information;    
     }
 }
+
+// const decodeOperation = (operation) => {
+//     const txt = document.createElement("textArea");
+//     txt.innerHTML = operation;
+//     return txt.value;
+// }

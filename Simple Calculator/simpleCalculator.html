@@ -12,12 +12,12 @@
         
         function loadEvent(e){
             var info = parseForm(document.location.href);
+            console.log(info);
             if(info){
                 var inputDisplay = document.getElementById('inputDisplay');
-                inputDisplay.innerText = info['input1'] +  info['operation'] + info['input2'];
-                var result = calculator(info['input1'], info['input2'], info['operation']);
+                var result = calculator(info['input1'], info['input2'], decodeURIComponent(info['operation']));
                 if(!isNaN(result)){
-                    inputDisplay.innerText+= '= ' + result;
+                    inputDisplay.innerHTML = `The answer is: ${result}`;
                 } else {
                     inputDisplay.innerText = 'Whoops, looks like something went wrong with your input. Try again!';
                 }
