@@ -1,6 +1,25 @@
 // v1 STAR MATCH - Starting Template
 // Items that share similar Data or Behaviors are good candidates for
 
+/* Buttons need to do multiple things, good clue that it might need to be a component
+  Gotcha: By naming component number, you're overwriting the native JS class Number!!!
+  How to avoid this? Always name your components with 2 words instead of one
+*/
+const PlayNumber = props => (
+  // Why does the onclick work? Javascript Closures
+  <button className="number" onClick={() => console.log('Num', props.number)}>
+    {props.number}
+  </button>
+);
+
+const StarsDisplay = props => (
+  <React.Fragment>
+    {utils.range(1,props.count).map(starId => 
+      <div key={starId} className="star" /> // Key always associated with the dynamic portion of map
+    )}
+  </React.Fragment>
+);
+
 const StarMatch = () => {
   // Whenever u identify a data element that's used in the ui and is going to change value, should make it into a state element
   const [stars, setStars] = useState(utils.random(1,9)); // Avoid for and while loops in react if you can: map/filter/reduce work better
@@ -11,13 +30,11 @@ const StarMatch = () => {
       </div>
       <div className="body">
         <div className="left">
-          {utils.range(1,stars).map(starId => 
-            <div key={starId} className="star" />
-          )}
+          <StarsDisplay count={stars}/>
         </div>
         <div className="right">
           {utils.range(1,9).map(number =>
-            <button key={number} className="number">{number}</button>
+            <PlayNumber key={number} number={number} />
           )}
         </div>
       </div>
