@@ -7,8 +7,12 @@
 */
 const PlayNumber = props => (
   // Why does the onclick work? Javascript Closures
-  <button className="number" onClick={() => console.log('Num', props.number)}>
-    {props.number}
+  <button 
+    className="number" 
+    onClick={() => console.log('Num', props.number)}
+    style={{backgroundColor: colors[props.status] }}
+  >
+      {props.number}
   </button>
 );
 
@@ -21,8 +25,22 @@ const StarsDisplay = props => (
 );
 
 const StarMatch = () => {
-  // Whenever u identify a data element that's used in the ui and is going to change value, should make it into a state element
-  const [stars, setStars] = useState(utils.random(1,9)); // Avoid for and while loops in react if you can: map/filter/reduce work better
+  // Whenever u identify a data element that's used in the ui and is going to change value, should make 
+  // it into a state element
+  // Avoid for and while loops in react if you can: map/filter/reduce work better
+  const [stars, setStars] = useState(utils.random(1,9)); 
+  const [availableNums, setAvailableNums] = useState(utils.range(1,9)); //Mock data is good for pre-testing ui
+  const [candidateNums, setCandidateNums] = useState([]);
+  
+  const candidatesAreWrong = utils.sum(candidateNums) > stars
+  // by returning a string, can use as a key directly to style array
+  const numberStatus = (number) => {
+    if (!availableNums.includes(number)) return 'used';
+    if (candidateNums.includes(number)) {
+      return candidatesAreWrong ? 'wrong' : 'candidate';
+    }
+    return 'available'
+  }
   return (
     <div className="game">
       <div className="help">
@@ -34,7 +52,11 @@ const StarMatch = () => {
         </div>
         <div className="right">
           {utils.range(1,9).map(number =>
-            <PlayNumber key={number} number={number} />
+            <PlayNumber 
+              key={number} 
+              status={numberStatus(number)}
+              number={number} 
+            />
           )}
         </div>
       </div>
