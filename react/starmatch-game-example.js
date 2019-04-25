@@ -1,6 +1,3 @@
-// v1 STAR MATCH - Starting Template
-// Items that share similar Data or Behaviors are good candidates for
-
 /* Buttons need to do multiple things, good clue that it might need to be a component
   Gotcha: By naming component number, you're overwriting the native JS class Number!!!
   How to avoid this? Always name your components with 2 words instead of one
@@ -16,6 +13,18 @@ const PlayNumber = props => (
   </button>
 );
 
+const PlayAgain = props => (
+  <div className="game-done">
+    <div 
+      class="message"
+      style={{ color:props.gameStatus === 'lost' ? 'red' : 'green'}}
+    >
+      {props.gameStatus === 'lost' ? 'Game Over' : 'Nice'}
+    </div>
+    <button onClick={props.onClick}>Play Again</button>
+  </div>
+)
+
 const StarsDisplay = props => (
   <React.Fragment>
     {utils.range(1,props.count).map(starId => 
@@ -30,9 +39,41 @@ const StarMatch = () => {
   // Avoid for and while loops in react if you can: map/filter/reduce work better
   const [stars, setStars] = useState(utils.random(1,9)); 
   const [availableNums, setAvailableNums] = useState(utils.range(1,9)); //Mock data is good for pre-testing ui
-  const [candidateNums, setCandidateNums] = useState([]);
+  const [candidateNums, setCandidateNums] = useState([]); // React.useState() available globally in plygrnd
+  const [secondsLeft, setSecondsLeft] = useState([10]);
+  // Some other hook functions other than useState like useEffect
+  // Will run the function passed every time owner component renders itself
+  /* 
+    Runs every time a state is changed which causes component to render
+    so every time you click something. Can create bugs like creating extra timeouts
+    When you create side effect, clean it when no longer needed
+    
+    Introduce side effect in code block, clean up in return function
+  */
+  // Available globally in the playground
+  useEffect(() => {
+    if (secondsLeft > 0 && availableNums.length > 0){
+       const timerId = setTimeout(()=>{
+        setSecondsLeft(secondsLeft - 1);
+      }, 1000); 
+      // will run the returned function when it's about to unmount / re-render component
+      return () => clearTimeout(timerId);
+    }
+  }); 
   
-  const candidatesAreWrong = utils.sum(candidateNums) > stars
+  const candidatesAreWrong = utils.sum(candidateNums) > stars;
+  // const gameIsWon = availableNums.length === 0;
+  // const gameIsLost = secondsLeft === 0;
+  const gameStatus =  availableNums.length === 0 ? 'won':
+    secondsLeft === 0 ? 'lost' : 'active'
+  
+  const resetGame = () => {
+    setStars(utils.random(1,9));
+    setAvailableNums(utils.range(1,9));
+    setCandidateNums([]);
+    // better to unmount components than reset their states to clean code up
+  }
+  
   // by returning a string, can use as a key directly to style array
   const numberStatus = (number) => {
     if (!availableNums.includes(number)) return 'used';
@@ -43,7 +84,7 @@ const StarMatch = () => {
   }
   
   const onNumberClick = (number, currentStatus) => {
-    if (currentStatus == 'used'){
+    if (gameStatus !== 'active' || currentStatus == 'used'){
       return;
     } 
     const newCandidateNums = 
@@ -75,7 +116,10 @@ const StarMatch = () => {
       </div>
       <div className="body">
         <div className="left">
-          <StarsDisplay count={stars}/>
+          {gameStatus !== 'active' ? 
+            <PlayAgain onClick={resetGame} gameStatus={gameStatus} /> :
+            <StarsDisplay count={stars}/>
+          }
         </div>
         <div className="right">
           {utils.range(1,9).map(number =>
@@ -88,7 +132,7 @@ const StarMatch = () => {
           )}
         </div>
       </div>
-      <div className="timer">Time Remaining: 10</div>
+      <div className="timer">Time Remaining: {secondsLeft}</div>
     </div>
   );
 };
