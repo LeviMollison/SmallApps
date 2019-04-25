@@ -33,7 +33,8 @@ const StarsDisplay = props => (
   </React.Fragment>
 );
 
-const StarMatch = () => {
+// This is entirely too big; manages the states and renders everything based on states
+const Game = (props) => {
   // Whenever u identify a data element that's used in the ui and is going to change value, should make 
   // it into a state element
   // Avoid for and while loops in react if you can: map/filter/reduce work better
@@ -67,12 +68,12 @@ const StarMatch = () => {
   const gameStatus =  availableNums.length === 0 ? 'won':
     secondsLeft === 0 ? 'lost' : 'active'
   
-  const resetGame = () => {
-    setStars(utils.random(1,9));
-    setAvailableNums(utils.range(1,9));
-    setCandidateNums([]);
-    // better to unmount components than reset their states to clean code up
-  }
+  // const resetGame = () => {
+  //   setStars(utils.random(1,9));
+  //   setAvailableNums(utils.range(1,9));
+  //   setCandidateNums([]);
+  //   // better to unmount components than reset their states to clean code up
+  // }
   
   // by returning a string, can use as a key directly to style array
   const numberStatus = (number) => {
@@ -117,7 +118,7 @@ const StarMatch = () => {
       <div className="body">
         <div className="left">
           {gameStatus !== 'active' ? 
-            <PlayAgain onClick={resetGame} gameStatus={gameStatus} /> :
+            <PlayAgain onClick={props.startNewGame} gameStatus={gameStatus} /> :
             <StarsDisplay count={stars}/>
           }
         </div>
@@ -136,6 +137,11 @@ const StarMatch = () => {
     </div>
   );
 };
+
+const StarMatch = () => {
+  const [gameId, setGameId] = useState(1);
+  return <Game key={gameId} startNewGame={() => setGameId(gameId + 1)} />;
+}
 
 // Color Theme
 const colors = {
@@ -175,4 +181,5 @@ const utils = {
   },
 };
 
+// Unmount and remount for proper resetting
 ReactDOM.render(<StarMatch />, mountNode);
