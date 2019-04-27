@@ -33,8 +33,13 @@ const StarsDisplay = props => (
   </React.Fragment>
 );
 
-// This is entirely too big; manages the states and renders everything based on states
-const Game = (props) => {
+/*
+  Custom Hook: Stateful function, group hooks here
+  Name these starting with the word use: label that the function is going to contain react hooks
+  Rule of hooks: Always use the react hooks function in the same order (can't define them conditionally)
+  - Don't call hooks inside loop or conditions
+*/
+const useGameState = () => {
   // Whenever u identify a data element that's used in the ui and is going to change value, should make 
   // it into a state element
   // Avoid for and while loops in react if you can: map/filter/reduce work better
@@ -62,6 +67,33 @@ const Game = (props) => {
     }
   }); 
   
+  const setGameState = (newCandidateNums) => {
+  if (utils.sum(newCandidateNums) !== stars) {
+      setCandidateNums(newCandidateNums);
+    } else { 
+      /* Sum of candidates = number of stars; we have a correct pick
+         If the number is not included in the new candidate numbers, keep it in the available numbers. Otherwise
+         Remove it
+      */
+      const newAvailableNums = availableNums.filter(
+        n => !newCandidateNums.includes(n)
+      );
+      setStars(utils.randomSumIn(newAvailableNums, 9)); //Redraws number of stars that are playable
+      setAvailableNums(newAvailableNums);
+      setCandidateNums([]);
+    }
+  }
+  return { stars, availableNums, candidateNums, secondsLeft, setGameState };
+};
+
+const Game = (props) => {
+  const {
+    stars,
+    availableNums,
+    candidateNums,
+    secondsLeft,
+    setGameState,
+  } = useGameState();
   const candidatesAreWrong = utils.sum(candidateNums) > stars;
   // const gameIsWon = availableNums.length === 0;
   // const gameIsLost = secondsLeft === 0;
@@ -89,25 +121,12 @@ const Game = (props) => {
       return;
     } 
     const newCandidateNums = 
-          currentStatus === 'available' ? 
-            // If it's part of the candidate numbers array, need to remove it
-            candidateNums.concat(number) : candidateNums.filter(cn => cn !== number)
-    
-          candidateNums.concat(number);
-    if (utils.sum(newCandidateNums) !== stars) {
-      setCandidateNums(newCandidateNums);
-    } else { 
-      /* Sum of candidates = number of stars; we have a correct pick
-         If the number is not included in the new candidate numbers, keep it in the available numbers. Otherwise
-         Remove it
-      */
-      const newAvailableNums = availableNums.filter(
-        n => !newCandidateNums.includes(n)
-      );
-      setStars(utils.randomSumIn(newAvailableNums, 9)); //Redraws number of stars that are playable
-      setAvailableNums(newAvailableNums);
-      setCandidateNums([]);
-    }
+        currentStatus === 'available' ? 
+          // If it's part of the candidate numbers array, need to remove it
+          candidateNums.concat(number) : candidateNums.filter(cn => cn !== number)
+
+        candidateNums.concat(number);
+    setGameState(newCandidateNums);
   };
   
   return (
