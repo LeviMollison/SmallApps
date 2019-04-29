@@ -1,0 +1,31 @@
+/* Periodically check package.json to make sure everything downloading dependencies correctly */
+mkdir env-setup-manual
+cd env-setup-manual
+npm init -y 
+npm i express 
+//framework to create nodejs webserver for server side rendering
+// Comes with a ton of dependencies, stored under mode_modules
+npm i react react-dom
+// contain core library and dom library to render an app to the dom or actually use server 
+// side rendering as well 
+npm i webpack webpack-cli
+// Module Bundler
+// When things shipped to browser, everythign has to be shipped in a single bundle (for 
+// browsers to read)
+// Might not need all this in the prod server (may not be bundling in prod) but for now, ok
+npm i babel-loader @babel/core @babel/node @babel/preset-env @babel/preset-react
+// Compiles jsx into regular react api calls
+// Need to hook into webpack process so JSX stuff converted: babel-loader
+// Rest of stuff for this package to be able to compile react
+// env preset: if you want to use modern JavaScript and want to target an older browser
+	// Specifiying which target browser version to hit will reduce size of download 
+npm i -D nodemon
+// Let's us automatically restart node when we change something
+// Node requires you to restart it whenever you change something: No Dev mode by default 
+// Is a Watcher: Auto restarts command
+npm i -D eslint babel-eslint eslint-plugin-react
+// Will analyze your code and tell you a problem exists / is lacking certain qualities 
+// immediatly
+// Consistency and styling checks
+// Using a variable that isnt defined, or defined a var that isnt used as you type
+// PLugin lets eslint understand jsx 
