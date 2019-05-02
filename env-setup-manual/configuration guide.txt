@@ -1,0 +1,22 @@
+// First configure eslint 
+.eslintrc.js
+// Skipping jest (best option for testing)
+// Prettier works with eslint 
+// webpack has some defaults it looks for, following the below folder structure makes it 
+// easier for it to follow
+fulljs/
+	dist/
+		main.js
+	src/
+		index.js
+		components/
+		App.js
+	server/
+		server.js
+
+mkdir dist
+mkdir src
+mkdir src/compontents
+mkdire src/server
+// webhack will take src files and write to distribution directory when rdy for production
+// webhack and babel config next
