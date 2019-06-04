@@ -1,3 +1,4 @@
+jscomplete.com/reactful
 // First configure eslint 
 .eslintrc.js
 // Skipping jest (best option for testing)
@@ -18,5 +19,9 @@ mkdir dist
 mkdir src
 mkdir src/compontents
 mkdire src/server
-// webhack will take src files and write to distribution directory when rdy for production
-// webhack and babel config next
+// webpack will take src files and write to distribution directory when rdy for production
+// webpack and babel config next
+// Need to tell webpack to invoke babel on any file that has .js so babel can run on them before webpack includes them in the bundle up
+// - It's a rule: every file that ends in .js and not in node_modules folder
+// need to run server and files now (from package.json scripts section)
+for dev-bundle task, wd will run in dev environment
